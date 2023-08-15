@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
                         child: BannerAdWidget(),
                       ),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.1),
+                          height: MediaQuery.of(context).size.height * 0.08),
                       Text(
                         'MENSETSU\nHelper',
                         textAlign: TextAlign.center,
@@ -49,10 +49,13 @@ class HomePage extends StatelessWidget {
                       print('asdf');
                     },
                     child: Container(
-                      color: Colors.blue,
                       width: double.infinity,
                       alignment: Alignment.center,
                       height: 58,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       child: Text(
                         '시작하기',
                         style: TextStyle(
