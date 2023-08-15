@@ -3,6 +3,10 @@
         android:label="mensetsu_helper"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1269394574545809~4948704887"
+            />
         <activity
             android:name=".MainActivity"
             android:exported="true"

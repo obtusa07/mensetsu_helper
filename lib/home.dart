@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mensetsu_helper/banner_ad_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,6 +20,9 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Container(
+                        child: BannerAdWidget(),
+                      ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.1),
                       Text(
