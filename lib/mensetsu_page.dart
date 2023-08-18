@@ -8,7 +8,7 @@ class MensetsuPage extends StatefulWidget {
 }
 
 class _MensetsuPageState extends State<MensetsuPage> {
-  final List<String> _textList = ['자기소개를 해주세요', '마지막으로 질문 있나요?'];
+  final List<String> _textList = ['자기소개를 해주세요', '마지막으로 질문 있나요?ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ'];
   int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -35,20 +35,33 @@ class _MensetsuPageState extends State<MensetsuPage> {
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                   Container(
-                    color: Colors.green,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1,
+                        )),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           onPressed: () {
                             print('아이콘 터치');
                           },
-                          icon: Icon(Icons.speaker),
+                          icon: Icon(Icons.volume_up),
                         ),
-                        Text(
-                          _textList[_currentIndex],
-                          style: TextStyle(
-                            color: Colors.amber,
-                            fontSize: 24,
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              _textList[_currentIndex],
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -70,8 +83,9 @@ class _MensetsuPageState extends State<MensetsuPage> {
                       borderRadius: BorderRadius.circular(16)),
                 ),
                 onPressed: () {
-                  print('버튼 클릭됨');
-                  _currentIndex++;
+                  setState(() {
+                    _currentIndex++;
+                  });
                 },
                 child: Text(_currentIndex < _textList.length - 1 ? '次へ' : '完了'),
               ),
