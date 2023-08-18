@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mensetsu_helper/result.dart';
 
 class MensetsuPage extends StatefulWidget {
   const MensetsuPage({super.key});
@@ -8,7 +9,7 @@ class MensetsuPage extends StatefulWidget {
 }
 
 class _MensetsuPageState extends State<MensetsuPage> {
-  final List<String> _textList = ['자기소개를 해주세요', '마지막으로 질문 있나요?ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ'];
+  final List<String> _textList = ['자기소개를 해주세요', 'ㅇㄴㄹㅁ'];
   int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -84,7 +85,17 @@ class _MensetsuPageState extends State<MensetsuPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _currentIndex++;
+                    if (_currentIndex == _textList.length - 1) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => Result(),
+                        ),
+                      );
+                    }
+                    if (_currentIndex < _textList.length - 1) {
+                      _currentIndex++;
+                    }
                   });
                 },
                 child: Text(_currentIndex < _textList.length - 1 ? '次へ' : '完了'),
