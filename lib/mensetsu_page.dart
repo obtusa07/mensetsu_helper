@@ -80,10 +80,10 @@ class _MensetsuPageState extends State<MensetsuPage> {
                               Navigator.pop(context);
                               Navigator.popUntil(
                                   context, ModalRoute.withName('/'));
+                              _timer?.cancel();
                               _currentIndex = 0;
                               _currentSecond = 0;
                               _TimeData = [];
-                              _timer?.cancel();
                             },
                             child: Text('そうだ'),
                           )
@@ -92,7 +92,12 @@ class _MensetsuPageState extends State<MensetsuPage> {
                     },
                   );
                 },
-                child: Text('オワタ...'),
+                child: Text(
+                  'オワタ...',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
             Padding(
