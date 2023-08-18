@@ -62,7 +62,36 @@ class _MensetsuPageState extends State<MensetsuPage> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.red),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("今回の面接は失敗しました..\nもう一回やりましょう"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('違う'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.popUntil(
+                                  context, ModalRoute.withName('/'));
+                              _currentIndex = 0;
+                              _currentSecond = 0;
+                              _TimeData = [];
+                              _timer?.cancel();
+                            },
+                            child: Text('そうだ'),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                },
                 child: Text('オワタ...'),
               ),
             ),
