@@ -1,5 +1,6 @@
+import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/result.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -14,15 +15,14 @@ class MensetsuPage extends StatefulWidget {
 class _MensetsuPageState extends State<MensetsuPage> {
   final List<String> _textList = ['自己紹介をしてください', '就活の軸を教えてください'];
   int _currentIndex = 0;
+  int _currentSecond = 0;
+  List<int> _TimeData = [];
   final FlutterTts tts = FlutterTts();
+  Timer? _timer;
 
-  // TTS 재생 기능 추가
   Future<void> _speak(String text) async {
     await tts.setLanguage("ja");
-    // local을 network로 바꾸면 더 발음이 정확함
-    if (Platform.isIOS) {
-      await tts.setVoice({"name": "Kyoko", "locale": "ja-JP"});
-    } else if (Platform.isAndroid) {
+    if (Platform.isAndroid) {
       await tts.setVoice({"name": "ja-jp-x-jab-network", "locale": "ja-JP"});
     }
     await tts.setVolume(1.0);
@@ -30,7 +30,13 @@ class _MensetsuPageState extends State<MensetsuPage> {
     await tts.setPitch(1);
     await tts.speak(text);
 
-    // print(await tts.getVoices);
+    _timer = Timer.periodic(
+      Duration(seconds: 1),
+      (timer) {
+        _currentSecond++;
+        print(120 - _currentSecond);
+      },
+    );
   }
 
   @override
@@ -115,7 +121,11 @@ class _MensetsuPageState extends State<MensetsuPage> {
                 ),
                 onPressed: () {
                   setState(() {
+                    _TimeData.add(_currentSecond);
+                    _currentSecond = 0;
                     if (_currentIndex == _textList.length - 1) {
+                      print(_TimeData);
+                      _timer?.cancel();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -124,6 +134,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
                       );
                     }
                     if (_currentIndex < _textList.length - 1) {
+                      _timer?.cancel();
                       _currentIndex++;
                       _speak(_textList[_currentIndex]);
                     }
