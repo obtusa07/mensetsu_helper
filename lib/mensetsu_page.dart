@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/result.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class MensetsuPage extends StatefulWidget {
   const MensetsuPage({super.key});
@@ -9,8 +12,33 @@ class MensetsuPage extends StatefulWidget {
 }
 
 class _MensetsuPageState extends State<MensetsuPage> {
-  final List<String> _textList = ['자기소개를 해주세요', 'ㅇㄴㄹㅁ'];
+  final List<String> _textList = ['自己紹介をしてください', '就活の軸を教えてください'];
   int _currentIndex = 0;
+  final FlutterTts tts = FlutterTts();
+
+  // TTS 재생 기능 추가
+  Future<void> _speak(String text) async {
+    await tts.setLanguage("ja");
+    // local을 network로 바꾸면 더 발음이 정확함
+    if (Platform.isIOS) {
+      await tts.setVoice({"name": "Kyoko", "locale": "ja-JP"});
+    } else if (Platform.isAndroid) {
+      await tts.setVoice({"name": "ja-jp-x-jab-network", "locale": "ja-JP"});
+    }
+    await tts.setVolume(1.0);
+    await tts.setSpeechRate(0.5);
+    await tts.setPitch(1);
+    await tts.speak(text);
+
+    // print(await tts.getVoices);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _speak(_textList[_currentIndex]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +77,8 @@ class _MensetsuPageState extends State<MensetsuPage> {
                         IconButton(
                           onPressed: () {
                             print('아이콘 터치');
+                            _speak(_textList[
+                                _currentIndex]); // 아이콘 버튼을 누르면 TTS 재생됩니다.
                           },
                           icon: Icon(Icons.volume_up),
                         ),
@@ -95,6 +125,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
                     }
                     if (_currentIndex < _textList.length - 1) {
                       _currentIndex++;
+                      _speak(_textList[_currentIndex]);
                     }
                   });
                 },
