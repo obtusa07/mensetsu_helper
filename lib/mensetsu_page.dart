@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/result.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class MensetsuPage extends StatefulWidget {
   const MensetsuPage({super.key});
@@ -33,8 +34,10 @@ class _MensetsuPageState extends State<MensetsuPage> {
     _timer = Timer.periodic(
       Duration(seconds: 1),
       (timer) {
-        _currentSecond++;
-        print(120 - _currentSecond);
+        setState(() {
+          _currentSecond++;
+          print(120 - _currentSecond);
+        });
       },
     );
   }
@@ -68,7 +71,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                   Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -104,8 +107,28 @@ class _MensetsuPageState extends State<MensetsuPage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.06),
                   Image.asset('assets/images/interviewer_man.png'),
+                  SizedBox(height: 10),
+                  LinearPercentIndicator(
+                    animation: true,
+                    percent: (120 - _currentSecond >= 0)
+                        ? (120 - _currentSecond) / 120
+                        : 0,
+                    lineHeight: 25,
+                    animationDuration: 0,
+                    progressColor:
+                        (_currentSecond >= 90) ? Colors.orange : Colors.green,
+                    barRadius: const Radius.circular(16),
+                    center: Text(
+                      (120 - _currentSecond >= 0)
+                          ? "${120 - _currentSecond} s"
+                          : "0s",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -124,7 +147,6 @@ class _MensetsuPageState extends State<MensetsuPage> {
                     _TimeData.add(_currentSecond);
                     _currentSecond = 0;
                     if (_currentIndex == _textList.length - 1) {
-                      print(_TimeData);
                       _timer?.cancel();
                       Navigator.push(
                         context,
