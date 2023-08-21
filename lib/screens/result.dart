@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mensetsu_helper/screens/home.dart';
 
 class Result extends StatelessWidget {
   Result({Key? key, required this.timeData}) : super(key: key) {
@@ -114,7 +115,14 @@ class Result extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => HomePage()),
+                    ModalRoute.withName('/'),
+                  );
+                },
                 child: Text(
                   'もう一度',
                   style: TextStyle(
