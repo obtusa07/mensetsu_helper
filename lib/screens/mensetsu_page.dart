@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/screens/result.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:mensetsu_helper/screens/banner_ad_widget.dart';
 
 class MensetsuPage extends StatefulWidget {
   const MensetsuPage({super.key});
@@ -200,11 +200,20 @@ class _MensetsuPageState extends State<MensetsuPage> {
                 child: Text(
                   _currentIndex < _textList.length - 1 ? '次へ' : '完了',
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            )
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              height: 75,
+              child: BannerAdWidget(), // 광고 배너를 추가합니다.
+            ),
           ],
         ),
       ),

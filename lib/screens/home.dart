@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // BannerAdWidget(),
+                    BannerAdWidget(),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                     Text(
                       'MENSETSU\nHelper',
@@ -57,15 +57,16 @@ class HomePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
-                      '시작하기',
+                      'スタート',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
+                        fontSize: 24,
                       ),
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

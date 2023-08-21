@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/screens/home.dart';
 
+import 'banner_ad_widget.dart';
+
 class Result extends StatelessWidget {
   Result({Key? key, required this.timeData}) : super(key: key) {
     resultData = [
@@ -126,11 +128,20 @@ class Result extends StatelessWidget {
                 child: Text(
                   'もう一度',
                   style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                     fontSize: 24,
                   ),
                 ),
               ),
-            )
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              height: 75,
+              child: BannerAdWidget(), // 광고 배너를 추가합니다.
+            ),
           ],
         ),
       ),

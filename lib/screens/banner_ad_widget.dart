@@ -48,6 +48,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 75,
+      width: MediaQuery.of(context).size.width,
       child: AdWidget(ad: banner),
     );
   }
