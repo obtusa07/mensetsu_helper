@@ -177,6 +177,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
                       borderRadius: BorderRadius.circular(16)),
                 ),
                 onPressed: () {
+                  tts.stop();
                   setState(() {
                     _timeData.add(_currentSecond);
                     _currentSecond = 0;

@@ -19,7 +19,7 @@ class Result extends StatelessWidget {
     "Longest Response Time",
     "Shortest Response Time"
   ];
-  late List<int> resultData;
+  late final List<int> resultData;
 
   String formatTime(int seconds) {
     int minutes = seconds ~/ 60;
