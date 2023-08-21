@@ -196,7 +196,12 @@ class _MensetsuPageState extends State<MensetsuPage> {
                     }
                   });
                 },
-                child: Text(_currentIndex < _textList.length - 1 ? '次へ' : '完了'),
+                child: Text(
+                  _currentIndex < _textList.length - 1 ? '次へ' : '完了',
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
               ),
             )
           ],

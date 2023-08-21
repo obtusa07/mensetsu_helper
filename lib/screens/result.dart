@@ -104,6 +104,25 @@ class Result extends StatelessWidget {
                 ),
               ],
             ),
+            Positioned(
+              bottom: 100,
+              left: 24,
+              right: 24,
+              height: 58,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                ),
+                onPressed: () {},
+                child: Text(
+                  'もう一度',
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
