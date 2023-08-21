@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mensetsu_helper/banner_ad_widget.dart';
-import 'package:mensetsu_helper/mensetsu_page.dart';
+import 'package:mensetsu_helper/screens/banner_ad_widget.dart';
+import 'package:mensetsu_helper/screens/mensetsu_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -41,7 +41,6 @@ class HomePage extends StatelessWidget {
                 right: 24,
                 child: GestureDetector(
                   onTap: () {
-                    print('asdf');
                     Navigator.push(
                       context,
                       MaterialPageRoute(

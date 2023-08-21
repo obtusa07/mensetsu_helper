@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mensetsu_helper/result.dart';
+import 'package:mensetsu_helper/screens/result.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -17,7 +17,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
   final List<String> _textList = ['自己紹介をしてください', '就活の軸を教えてください'];
   int _currentIndex = 0;
   int _currentSecond = 0;
-  List<int> _TimeData = [];
+  List<int> _timeData = [];
   final FlutterTts tts = FlutterTts();
   Timer? _timer;
 
@@ -83,7 +83,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
                               _timer?.cancel();
                               _currentIndex = 0;
                               _currentSecond = 0;
-                              _TimeData = [];
+                              _timeData = [];
                             },
                             child: Text('そうだ'),
                           )
@@ -178,14 +178,14 @@ class _MensetsuPageState extends State<MensetsuPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _TimeData.add(_currentSecond);
+                    _timeData.add(_currentSecond);
                     _currentSecond = 0;
                     if (_currentIndex == _textList.length - 1) {
                       _timer?.cancel();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => Result(),
+                          builder: (_) => Result(timeData: _timeData),
                         ),
                       );
                     }
