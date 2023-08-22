@@ -1,4 +1,4 @@
-package com.example.mensetsu_helper
+package com.mensetsuhelper
 
 import io.flutter.embedding.android.FlutterActivity
 
