@@ -1,2 +1,6 @@
 # mensetsu_helper
- mensetsu helper
+ 
+
+일본의 취업 특성을 고려한 면접 연습을 도와주는 앱입니다. Flutter를 이용하여 iOS와 Android 모두 지원하는 앱으로 출시를 준비하고 있습니다.
+
+MVP 버전의 준비가 끝났으며 기획한 기능을 순차적으로 업데이트 할 예정입니다.
