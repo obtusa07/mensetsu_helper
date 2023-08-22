@@ -14,7 +14,17 @@ class MensetsuPage extends StatefulWidget {
 }
 
 class _MensetsuPageState extends State<MensetsuPage> {
-  final List<String> _textList = ['自己紹介をしてください', '就活の軸を教えてください'];
+  final List<String> _textList = [
+    '自己紹介をしてください',
+    '学生時代に頑張ったことを教えてください',
+    '誰にも負けないことは何ですか',
+    '短所を教えてください',
+    'あなたの失敗体験を教えてください',
+    '志望動機を教えてください',
+    '就活の軸を教えてください',
+    '入社後にしたいことを教えてください',
+    '最後に質問はありますか？'
+  ];
   int _currentIndex = 0;
   int _currentSecond = 0;
   List<int> _timeData = [];
@@ -36,7 +46,6 @@ class _MensetsuPageState extends State<MensetsuPage> {
       (timer) {
         setState(() {
           _currentSecond++;
-          print(120 - _currentSecond);
         });
       },
     );
@@ -114,31 +123,33 @@ class _MensetsuPageState extends State<MensetsuPage> {
                           color: Colors.black,
                           width: 1,
                         )),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            print('아이콘 터치');
-                            _speak(_textList[
-                                _currentIndex]); // 아이콘 버튼을 누르면 TTS 재생됩니다.
-                          },
-                          icon: Icon(Icons.volume_up),
-                        ),
-                        Expanded(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              _textList[_currentIndex],
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              _speak(_textList[
+                                  _currentIndex]); // 아이콘 버튼을 누르면 TTS 재생됩니다.
+                            },
+                            icon: Icon(Icons.volume_up),
+                          ),
+                          Expanded(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                _textList[_currentIndex],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.06),
