@@ -32,6 +32,10 @@ class _MensetsuPageState extends State<MensetsuPage> {
   Timer? _timer;
 
   Future<void> _speak(String text) async {
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
+    }
+
     await tts.setLanguage("ja");
     if (Platform.isAndroid) {
       await tts.setVoice({"name": "ja-jp-x-jab-network", "locale": "ja-JP"});
