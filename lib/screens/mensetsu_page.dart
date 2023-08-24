@@ -100,6 +100,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
                               _currentIndex = 0;
                               _currentSecond = 0;
                               // 여기에 비우기
+                              mensetsuTimeService.clearTimeData();
                             },
                             child: Text('そうだ'),
                           )

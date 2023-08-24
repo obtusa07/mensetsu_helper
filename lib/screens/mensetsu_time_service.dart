@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
 class MensetsuTimeService extends ChangeNotifier {
-  final List<int> _timeData = [];
+  List<int> _timeData = [];
   List<int> get timeData => _timeData;
 
   void addTime(int time) {
     _timeData.add(time);
+    notifyListeners();
+  }
+
+  void clearTimeData() {
+    _timeData = [];
     notifyListeners();
   }
 
