@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mensetsu_helper/screens/home.dart';
-import 'package:mensetsu_helper/screens/mensetsu_time_service.dart';
+import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
