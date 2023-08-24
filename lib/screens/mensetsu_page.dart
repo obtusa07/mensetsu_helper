@@ -92,7 +92,6 @@ class _MensetsuPageState extends State<MensetsuPage> {
                               _timer?.cancel();
                               _currentIndex = 0;
                               _currentSecond = 0;
-                              // 여기에 비우기
                               mensetsuTimeService.clearTimeData();
                             },
                             child: Text('そうだ'),
@@ -131,7 +130,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              _speak(); // 아이콘 버튼을 누르면 TTS 재생됩니다.
+                              _speak();
                             },
                             icon: Icon(Icons.volume_up),
                           ),
