@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/screens/home.dart';
-
+import 'package:mensetsu_helper/screens/mensetsu_time_service.dart';
+import 'package:provider/provider.dart';
 import 'banner_ad_widget.dart';
 
-class Result extends StatelessWidget {
-  Result({Key? key, required this.timeData}) : super(key: key) {
-    resultData = [
-      timeData.fold(0, (previousValue, element) => previousValue + element),
-      (timeData.reduce((value, element) => value + element) / timeData.length)
-          .round(),
-      timeData.reduce((value, element) => value > element ? value : element),
-      timeData.reduce((value, element) => value < element ? value : element)
-    ];
-  }
+class Result extends StatefulWidget {
+  const Result({Key? key}) : super(key: key);
 
-  final List<int> timeData;
+  @override
+  State<Result> createState() => _ResultState();
+}
+
+class _ResultState extends State<Result> {
   final List<String> titles = [
     "Total Mensetsu Time",
     "Average Response Time",
     "Longest Response Time",
     "Shortest Response Time"
   ];
-  late final List<int> resultData;
 
   String formatTime(int seconds) {
     int minutes = seconds ~/ 60;
@@ -39,6 +35,14 @@ class Result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mensetsuTimeService = Provider.of<MensetsuTimeService>(context);
+    List<int> resultData = [
+      mensetsuTimeService.getTotalTime(),
+      mensetsuTimeService.getAverageTime(),
+      mensetsuTimeService.getLongestResponseTime(),
+      mensetsuTimeService.getShortestResponseTime(),
+    ];
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -140,7 +144,7 @@ class Result extends StatelessWidget {
               right: 0,
               left: 0,
               height: 75,
-              child: BannerAdWidget(), // 광고 배너를 추가합니다.
+              child: BannerAdWidget(),
             ),
           ],
         ),
