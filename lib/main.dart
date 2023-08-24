@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mensetsu_helper/models/text_list_model.dart';
 import 'package:mensetsu_helper/screens/home.dart';
 import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +10,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => MensetsuTimeService(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MensetsuTimeService()),
+        ChangeNotifierProvider(create: (context) => TextListModel()),
+      ],
       child: MyApp(),
     ),
   );

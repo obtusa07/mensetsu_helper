@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/screens/home.dart';
-import 'package:mensetsu_helper/screens/mensetsu_time_service.dart';
+import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:provider/provider.dart';
 import 'banner_ad_widget.dart';
 

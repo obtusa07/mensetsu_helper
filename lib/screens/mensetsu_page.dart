@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mensetsu_helper/screens/mensetsu_time_service.dart';
+import 'package:mensetsu_helper/models/text_list_model.dart';
+import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:mensetsu_helper/screens/result.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -16,26 +17,17 @@ class MensetsuPage extends StatefulWidget {
 }
 
 class _MensetsuPageState extends State<MensetsuPage> {
-  final List<String> _textList = [
-    '自己紹介をしてください',
-    '学生時代に頑張ったことを教えてください',
-    '誰にも負けないことは何ですか',
-    '短所を教えてください',
-    'あなたの失敗体験を教えてください',
-    '志望動機を教えてください',
-    '就活の軸を教えてください',
-    '入社後にしたいことを教えてください',
-    '最後に質問はありますか？'
-  ];
+  final FlutterTts tts = FlutterTts();
   int _currentIndex = 0;
   int _currentSecond = 0;
-  final FlutterTts tts = FlutterTts();
   Timer? _timer;
 
-  Future<void> _speak(String text) async {
+  Future<void> _speak() async {
     if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
     }
+
+    String text = context.read<TextListModel>().textList[_currentIndex];
 
     await tts.setLanguage("ja");
     if (Platform.isAndroid) {
@@ -59,13 +51,14 @@ class _MensetsuPageState extends State<MensetsuPage> {
   @override
   void initState() {
     super.initState();
-    _speak(_textList[_currentIndex]);
+    _speak();
   }
 
   @override
   Widget build(BuildContext context) {
     final mensetsuTimeService =
         Provider.of<MensetsuTimeService>(context, listen: false);
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -138,8 +131,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              _speak(_textList[
-                                  _currentIndex]); // 아이콘 버튼을 누르면 TTS 재생됩니다.
+                              _speak(); // 아이콘 버튼을 누르면 TTS 재생됩니다.
                             },
                             icon: Icon(Icons.volume_up),
                           ),
@@ -147,7 +139,9 @@ class _MensetsuPageState extends State<MensetsuPage> {
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                _textList[_currentIndex],
+                                context
+                                    .read<TextListModel>()
+                                    .textList[_currentIndex],
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 24,
@@ -201,22 +195,27 @@ class _MensetsuPageState extends State<MensetsuPage> {
                     mensetsuTimeService.addTime(_currentSecond);
 
                     _currentSecond = 0;
-                    if (_currentIndex == _textList.length - 1) {
+                    if (_currentIndex ==
+                        context.read<TextListModel>().textList.length - 1) {
                       _timer?.cancel();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => Result()),
                       );
                     }
-                    if (_currentIndex < _textList.length - 1) {
+                    if (_currentIndex <
+                        context.read<TextListModel>().textList.length - 1) {
                       _timer?.cancel();
                       _currentIndex++;
-                      _speak(_textList[_currentIndex]);
+                      _speak();
                     }
                   });
                 },
                 child: Text(
-                  _currentIndex < _textList.length - 1 ? '次へ' : '完了',
+                  _currentIndex <
+                          context.read<TextListModel>().textList.length - 1
+                      ? '次へ'
+                      : '完了',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
