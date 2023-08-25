@@ -1,13 +1,12 @@
-import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/models/text_list_model.dart';
 import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:mensetsu_helper/screens/result.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:mensetsu_helper/screens/banner_ad_widget.dart';
 import 'package:provider/provider.dart';
+import '../services/timer_service.dart';
+import '../services/tts_service.dart';
 
 class MensetsuPage extends StatefulWidget {
   const MensetsuPage({super.key});
@@ -17,47 +16,24 @@ class MensetsuPage extends StatefulWidget {
 }
 
 class _MensetsuPageState extends State<MensetsuPage> {
-  final FlutterTts tts = FlutterTts();
   int _currentIndex = 0;
-  int _currentSecond = 0;
-  Timer? _timer;
-
-  Future<void> _speak() async {
-    if (_timer != null && _timer!.isActive) {
-      _timer!.cancel();
-    }
-
-    String text = context.read<TextListModel>().textList[_currentIndex];
-
-    await tts.setLanguage("ja");
-    if (Platform.isAndroid) {
-      await tts.setVoice({"name": "ja-jp-x-jab-network", "locale": "ja-JP"});
-    }
-    await tts.setVolume(1.0);
-    await tts.setSpeechRate(0.5);
-    await tts.setPitch(1);
-    await tts.speak(text);
-
-    _timer = Timer.periodic(
-      Duration(seconds: 1),
-      (timer) {
-        setState(() {
-          _currentSecond++;
-        });
-      },
-    );
-  }
 
   @override
   void initState() {
     super.initState();
-    _speak();
+    context.read<TimerService>().startTimer();
+    context
+        .read<TtsService>()
+        .speak(context.read<TextListModel>().textList[_currentIndex]);
   }
 
   @override
   Widget build(BuildContext context) {
     final mensetsuTimeService =
         Provider.of<MensetsuTimeService>(context, listen: false);
+    TextListModel textListModel = context.watch<TextListModel>();
+    TtsService ttsService = context.watch<TtsService>();
+    TimerService timerService = context.watch<TimerService>();
 
     return Scaffold(
       body: SafeArea(
@@ -89,9 +65,9 @@ class _MensetsuPageState extends State<MensetsuPage> {
                               Navigator.pop(context);
                               Navigator.popUntil(
                                   context, ModalRoute.withName('/'));
-                              _timer?.cancel();
+
+                              timerService.resetTimer();
                               _currentIndex = 0;
-                              _currentSecond = 0;
                               mensetsuTimeService.clearTimeData();
                             },
                             child: Text('そうだ'),
@@ -130,7 +106,9 @@ class _MensetsuPageState extends State<MensetsuPage> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              _speak();
+                              ttsService.speak(context
+                                  .read<TextListModel>()
+                                  .textList[_currentIndex]);
                             },
                             icon: Icon(Icons.volume_up),
                           ),
@@ -158,17 +136,18 @@ class _MensetsuPageState extends State<MensetsuPage> {
                   SizedBox(height: 10),
                   LinearPercentIndicator(
                     animation: true,
-                    percent: (120 - _currentSecond >= 0)
-                        ? (120 - _currentSecond) / 120
+                    percent: (120 - timerService.currentSecond >= 0)
+                        ? (120 - timerService.currentSecond) / 120
                         : 0,
                     lineHeight: 25,
                     animationDuration: 0,
-                    progressColor:
-                        (_currentSecond >= 90) ? Colors.orange : Colors.green,
+                    progressColor: (timerService.currentSecond >= 90)
+                        ? Colors.orange
+                        : Colors.green,
                     barRadius: const Radius.circular(16),
                     center: Text(
-                      (120 - _currentSecond >= 0)
-                          ? "${120 - _currentSecond} s"
+                      (120 - timerService.currentSecond >= 0)
+                          ? "${120 - timerService.currentSecond} s"
                           : "0s",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -189,30 +168,23 @@ class _MensetsuPageState extends State<MensetsuPage> {
                       borderRadius: BorderRadius.circular(16)),
                 ),
                 onPressed: () {
-                  tts.stop();
-                  setState(() {
-                    mensetsuTimeService.addTime(_currentSecond);
-
-                    _currentSecond = 0;
-                    if (_currentIndex ==
-                        context.read<TextListModel>().textList.length - 1) {
-                      _timer?.cancel();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => Result()),
-                      );
-                    }
-                    if (_currentIndex <
-                        context.read<TextListModel>().textList.length - 1) {
-                      _timer?.cancel();
-                      _currentIndex++;
-                      _speak();
-                    }
-                  });
+                  ttsService.stopTts();
+                  mensetsuTimeService.addTime(timerService.currentSecond);
+                  timerService.stopTimer();
+                  if (_currentIndex == textListModel.textList.length - 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => Result()),
+                    );
+                  }
+                  if (_currentIndex < textListModel.textList.length - 1) {
+                    _currentIndex++;
+                    ttsService.speak(textListModel.textList[_currentIndex]);
+                    timerService.startTimer();
+                  }
                 },
                 child: Text(
-                  _currentIndex <
-                          context.read<TextListModel>().textList.length - 1
+                  _currentIndex < textListModel.textList.length - 1
                       ? '次へ'
                       : '完了',
                   style: TextStyle(
