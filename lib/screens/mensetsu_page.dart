@@ -1,10 +1,12 @@
-import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mensetsu_helper/models/text_list_model.dart';
+import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:mensetsu_helper/screens/result.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:mensetsu_helper/screens/banner_ad_widget.dart';
+import 'package:provider/provider.dart';
+import '../services/timer_service.dart';
+import '../services/tts_service.dart';
 
 class MensetsuPage extends StatefulWidget {
   const MensetsuPage({super.key});
@@ -14,55 +16,25 @@ class MensetsuPage extends StatefulWidget {
 }
 
 class _MensetsuPageState extends State<MensetsuPage> {
-  final List<String> _textList = [
-    '自己紹介をしてください',
-    '学生時代に頑張ったことを教えてください',
-    '誰にも負けないことは何ですか',
-    '短所を教えてください',
-    'あなたの失敗体験を教えてください',
-    '志望動機を教えてください',
-    '就活の軸を教えてください',
-    '入社後にしたいことを教えてください',
-    '最後に質問はありますか？'
-  ];
   int _currentIndex = 0;
-  int _currentSecond = 0;
-  List<int> _timeData = [];
-  final FlutterTts tts = FlutterTts();
-  Timer? _timer;
-
-  Future<void> _speak(String text) async {
-    if (_timer != null && _timer!.isActive) {
-      _timer!.cancel();
-    }
-
-    await tts.setLanguage("ja");
-    if (Platform.isAndroid) {
-      await tts.setVoice({"name": "ja-jp-x-jab-network", "locale": "ja-JP"});
-    }
-    await tts.setVolume(1.0);
-    await tts.setSpeechRate(0.5);
-    await tts.setPitch(1);
-    await tts.speak(text);
-
-    _timer = Timer.periodic(
-      Duration(seconds: 1),
-      (timer) {
-        setState(() {
-          _currentSecond++;
-        });
-      },
-    );
-  }
 
   @override
   void initState() {
     super.initState();
-    _speak(_textList[_currentIndex]);
+    context.read<TimerService>().startTimer();
+    context
+        .read<TtsService>()
+        .speak(context.read<TextListModel>().textList[_currentIndex]);
   }
 
   @override
   Widget build(BuildContext context) {
+    final mensetsuTimeService =
+        Provider.of<MensetsuTimeService>(context, listen: false);
+    TextListModel textListModel = context.watch<TextListModel>();
+    TtsService ttsService = context.watch<TtsService>();
+    TimerService timerService = context.watch<TimerService>();
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -93,10 +65,10 @@ class _MensetsuPageState extends State<MensetsuPage> {
                               Navigator.pop(context);
                               Navigator.popUntil(
                                   context, ModalRoute.withName('/'));
-                              _timer?.cancel();
+
+                              timerService.resetTimer();
                               _currentIndex = 0;
-                              _currentSecond = 0;
-                              _timeData = [];
+                              mensetsuTimeService.clearTimeData();
                             },
                             child: Text('そうだ'),
                           )
@@ -134,8 +106,9 @@ class _MensetsuPageState extends State<MensetsuPage> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              _speak(_textList[
-                                  _currentIndex]); // 아이콘 버튼을 누르면 TTS 재생됩니다.
+                              ttsService.speak(context
+                                  .read<TextListModel>()
+                                  .textList[_currentIndex]);
                             },
                             icon: Icon(Icons.volume_up),
                           ),
@@ -143,7 +116,9 @@ class _MensetsuPageState extends State<MensetsuPage> {
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                _textList[_currentIndex],
+                                context
+                                    .read<TextListModel>()
+                                    .textList[_currentIndex],
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 24,
@@ -161,17 +136,18 @@ class _MensetsuPageState extends State<MensetsuPage> {
                   SizedBox(height: 10),
                   LinearPercentIndicator(
                     animation: true,
-                    percent: (120 - _currentSecond >= 0)
-                        ? (120 - _currentSecond) / 120
+                    percent: (120 - timerService.currentSecond >= 0)
+                        ? (120 - timerService.currentSecond) / 120
                         : 0,
                     lineHeight: 25,
                     animationDuration: 0,
-                    progressColor:
-                        (_currentSecond >= 90) ? Colors.orange : Colors.green,
+                    progressColor: (timerService.currentSecond >= 90)
+                        ? Colors.orange
+                        : Colors.green,
                     barRadius: const Radius.circular(16),
                     center: Text(
-                      (120 - _currentSecond >= 0)
-                          ? "${120 - _currentSecond} s"
+                      (120 - timerService.currentSecond >= 0)
+                          ? "${120 - timerService.currentSecond} s"
                           : "0s",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -192,28 +168,25 @@ class _MensetsuPageState extends State<MensetsuPage> {
                       borderRadius: BorderRadius.circular(16)),
                 ),
                 onPressed: () {
-                  tts.stop();
-                  setState(() {
-                    _timeData.add(_currentSecond);
-                    _currentSecond = 0;
-                    if (_currentIndex == _textList.length - 1) {
-                      _timer?.cancel();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => Result(timeData: _timeData),
-                        ),
-                      );
-                    }
-                    if (_currentIndex < _textList.length - 1) {
-                      _timer?.cancel();
-                      _currentIndex++;
-                      _speak(_textList[_currentIndex]);
-                    }
-                  });
+                  ttsService.stopTts();
+                  mensetsuTimeService.addTime(timerService.currentSecond);
+                  timerService.stopTimer();
+                  if (_currentIndex == textListModel.textList.length - 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => Result()),
+                    );
+                  }
+                  if (_currentIndex < textListModel.textList.length - 1) {
+                    _currentIndex++;
+                    ttsService.speak(textListModel.textList[_currentIndex]);
+                    timerService.startTimer();
+                  }
                 },
                 child: Text(
-                  _currentIndex < _textList.length - 1 ? '次へ' : '完了',
+                  _currentIndex < textListModel.textList.length - 1
+                      ? '次へ'
+                      : '完了',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -227,7 +200,7 @@ class _MensetsuPageState extends State<MensetsuPage> {
               right: 0,
               left: 0,
               height: 75,
-              child: BannerAdWidget(), // 광고 배너를 추가합니다.
+              child: BannerAdWidget(),
             ),
           ],
         ),
