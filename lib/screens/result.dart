@@ -67,7 +67,7 @@ class _ResultState extends State<Result> {
                 Image.asset('assets/images/mensetsu_result.png',
                     height: MediaQuery.of(context).size.height * 0.24),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.33,
+                  height: MediaQuery.of(context).size.height * 0.35,
                   child: GridView.count(
                     physics: NeverScrollableScrollPhysics(),
                     crossAxisCount: 2,
