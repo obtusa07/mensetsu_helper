@@ -7,7 +7,7 @@
 ![Android](https://img.shields.io/badge/Android-21-brightgreen.svg)
 
 일본의 취업 특성을 고려한 면접 연습을 도와주는 앱입니다. 
-Flutter를 이용하여 iOS와 Android 모두 지원하는 앱으로 출시를 준비하고 있습니다.
+Flutter를 이용하여 iOS와 Android 모두 지원하는 앱으로 현재 Google Play에 릴리즈 했습니다.
 
 ## Next Feature
 - 기능 스플래시
