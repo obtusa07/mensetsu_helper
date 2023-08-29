@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mensetsu_helper/screens/home.dart';
 import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:provider/provider.dart';
+import '../viewModels/result_grid_viewmodel.dart';
 import 'banner_ad_widget.dart';
 
-class Result extends StatefulWidget {
-  const Result({Key? key}) : super(key: key);
+class Result extends StatelessWidget {
+  Result({Key? key}) : super(key: key);
+  late final ResultGridViewModel viewModel;
 
-  @override
-  State<Result> createState() => _ResultState();
-}
-
-class _ResultState extends State<Result> {
   final List<String> titles = [
     "Total Mensetsu Time",
     "Average Response Time",
@@ -36,6 +33,7 @@ class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     final mensetsuTimeService = Provider.of<MensetsuTimeService>(context);
+    viewModel = Provider.of<ResultGridViewModel>(context);
     List<int> resultData = [
       mensetsuTimeService.getTotalTime(),
       mensetsuTimeService.getAverageTime(),
@@ -86,7 +84,8 @@ class _ResultState extends State<Result> {
                             children: [
                               FittedBox(
                                 child: Text(
-                                  titles[index],
+                                  viewModel.titles[index],
+                                  // titles[index],
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
@@ -98,7 +97,8 @@ class _ResultState extends State<Result> {
                               Spacer(),
                               Expanded(
                                 child: Text(
-                                  formatTime(resultData[index]),
+                                  // formatTime(resultData[index]),
+                                  'ㅁㄴㅇㄹ',
                                   style: TextStyle(fontSize: 24),
                                 ),
                               ),

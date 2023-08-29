@@ -6,6 +6,7 @@ import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:mensetsu_helper/services/timer_service.dart';
 import 'package:mensetsu_helper/services/tts_service.dart';
 import 'package:provider/provider.dart';
+import 'viewModels/result_grid_viewmodel.dart';
 
 void main() async {
   // 적절한 Ad 설정을 하지 않고 아래 코드를 실행할 경우 정상 작동 불가
@@ -18,6 +19,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => TextListModel()),
         ChangeNotifierProvider(create: (context) => TtsService()),
         ChangeNotifierProvider(create: (context) => TimerService()),
+        ChangeNotifierProvider(create: (context) => ResultGridViewModel()),
       ],
       child: MyApp(),
     ),
