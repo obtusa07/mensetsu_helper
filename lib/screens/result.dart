@@ -34,6 +34,7 @@ class Result extends StatelessWidget {
   Widget build(BuildContext context) {
     final mensetsuTimeService = Provider.of<MensetsuTimeService>(context);
     viewModel = Provider.of<ResultGridViewModel>(context);
+
     List<int> resultData = [
       mensetsuTimeService.getTotalTime(),
       mensetsuTimeService.getAverageTime(),
@@ -85,7 +86,6 @@ class Result extends StatelessWidget {
                               FittedBox(
                                 child: Text(
                                   viewModel.titles[index],
-                                  // titles[index],
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,

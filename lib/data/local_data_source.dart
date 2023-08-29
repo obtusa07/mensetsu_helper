@@ -1,6 +1,6 @@
 class LocalDataSource {
   Future<List<String>> getResultTitle() async {
-    // 슈도 코드
+    // Pseudo Data
     return [
       "Total Mensetsu Time",
       "Average Response Time",
