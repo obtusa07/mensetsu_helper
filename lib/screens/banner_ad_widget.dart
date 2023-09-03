@@ -19,8 +19,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     //광고 ID 설정
     final adUnitId = Platform.isIOS
         // 테스트용 배너 ID ca-app-pub-3940256099942544/6300978111
-        ? 'ca-app-pub-1269394574545809~1225669023'
-        : 'ca-app-pub-1269394574545809~4948704887';
+        ? 'ca-app-pub-1269394574545809/2051665539'
+        : 'ca-app-pub-1269394574545809/9275549431';
 
     // 광고 생성
     banner = BannerAd(
