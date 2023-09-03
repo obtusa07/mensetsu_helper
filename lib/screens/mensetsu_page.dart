@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:mensetsu_helper/models/text_list_model.dart';
 import 'package:mensetsu_helper/services/mensetsu_time_service.dart';
 import 'package:mensetsu_helper/screens/result.dart';
+import 'package:mensetsu_helper/utils/logger.dart';
+
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:mensetsu_helper/screens/banner_ad_widget.dart';
 import 'package:provider/provider.dart';
@@ -61,11 +64,11 @@ class _MensetsuPageState extends State<MensetsuPage> {
                             child: Text('違う'),
                           ),
                           TextButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              logger.d('navigate to Home Page');
                               Navigator.pop(context);
                               Navigator.popUntil(
                                   context, ModalRoute.withName('/'));
-
                               timerService.resetTimer();
                               _currentIndex = 0;
                               mensetsuTimeService.clearTimeData();
@@ -105,7 +108,8 @@ class _MensetsuPageState extends State<MensetsuPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              logger.d('activate TTS button');
                               ttsService.speak(context
                                   .read<TextListModel>()
                                   .textList[_currentIndex]);
@@ -167,17 +171,19 @@ class _MensetsuPageState extends State<MensetsuPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   ttsService.stopTts();
                   mensetsuTimeService.addTime(timerService.currentSecond);
                   timerService.stopTimer();
                   if (_currentIndex == textListModel.textList.length - 1) {
+                    logger.d('navigate to Result Page');
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => Result()),
                     );
                   }
                   if (_currentIndex < textListModel.textList.length - 1) {
+                    logger.d('show next Question');
                     _currentIndex++;
                     ttsService.speak(textListModel.textList[_currentIndex]);
                     timerService.startTimer();

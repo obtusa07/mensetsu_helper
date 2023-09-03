@@ -7,7 +7,6 @@ import 'banner_ad_widget.dart';
 
 class Result extends StatelessWidget {
   Result({Key? key}) : super(key: key);
-  // late final ResultGridViewModel viewModel;
 
   final List<String> titles = [
     "Total Mensetsu Time",
