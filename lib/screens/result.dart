@@ -7,7 +7,7 @@ import 'banner_ad_widget.dart';
 
 class Result extends StatelessWidget {
   Result({Key? key}) : super(key: key);
-  late final ResultGridViewModel viewModel;
+  // late final ResultGridViewModel viewModel;
 
   final List<String> titles = [
     "Total Mensetsu Time",
@@ -33,14 +33,16 @@ class Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mensetsuTimeService = Provider.of<MensetsuTimeService>(context);
-    viewModel = Provider.of<ResultGridViewModel>(context);
 
-    List<int> resultData = [
-      mensetsuTimeService.getTotalTime(),
-      mensetsuTimeService.getAverageTime(),
-      mensetsuTimeService.getLongestResponseTime(),
-      mensetsuTimeService.getShortestResponseTime(),
-    ];
+    final ResultGridViewModel viewModel =
+        Provider.of<ResultGridViewModel>(context);
+
+    // List<int> resultData = [
+    //   mensetsuTimeService.getTotalTime(),
+    //   mensetsuTimeService.getAverageTime(),
+    //   mensetsuTimeService.getLongestResponseTime(),
+    //   mensetsuTimeService.getShortestResponseTime(),
+    // ];
 
     return Scaffold(
       body: SafeArea(
